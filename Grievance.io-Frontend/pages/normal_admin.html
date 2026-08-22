@@ -1,0 +1,909 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Console - Student Grievance System</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap"
+      rel="stylesheet"
+    />
+
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ["Inter", "sans-serif"],
+              serif: ["Playfair Display", "serif"],
+            },
+            colors: { brandBlack: "#1d1d1f", brandGray: "#f5f5f7" },
+          },
+        },
+      };
+    </script>
+    <style>
+      /* Visual Style - Glassmorphism */
+      .glass-panel {
+        background: rgba(255, 255, 255, 0.75);
+        backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 255, 255, 0.6);
+        box-shadow: 0 4px 30px rgba(0, 0, 0, 0.03);
+      }
+
+      /* Navigation & Interactive Elements */
+      .nav-item {
+        transition: all 0.2s;
+        border-radius: 12px;
+        cursor: pointer;
+        color: #6b7280;
+      }
+      .nav-item:hover,
+      .nav-item.active {
+        background-color: rgba(0, 0, 0, 0.05);
+        font-weight: 600;
+        color: #111827;
+      }
+
+      /* View Switching Utility */
+      .view-section {
+        display: none;
+        animation: fadeIn 0.3s ease-in-out;
+      }
+      .view-section.active {
+        display: block;
+      }
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(5px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+    </style>
+  </head>
+  <body class="bg-brandGray text-brandBlack min-h-screen flex overflow-hidden">
+    <aside
+      class="w-64 hidden md:flex flex-col border-r border-gray-200 bg-white/60 backdrop-blur-xl h-screen fixed top-0 left-0 z-30"
+    >
+      <div class="p-6 flex items-center gap-3">
+        <div
+          class="w-8 h-8 bg-black rounded-lg flex items-center justify-center text-white font-bold text-xs shadow-lg"
+        >
+          U
+        </div>
+        <div>
+          <h1 class="font-serif font-bold text-lg leading-none">University</h1>
+          <span class="text-[10px] text-gray-500 uppercase tracking-widest"
+            >Admin Console</span
+          >
+        </div>
+      </div>
+
+      <nav class="flex-1 px-4 space-y-1 mt-6">
+        <div
+          id="nav-dashboard"
+          class="nav-item active flex items-center gap-3 px-4 py-3 text-sm"
+        >
+          <svg
+            class="w-5 h-5"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"
+            ></path>
+          </svg>
+          Dashboard
+        </div>
+        <div
+          id="nav-cases"
+          class="nav-item flex items-center gap-3 px-4 py-3 text-sm"
+        >
+          <svg
+            class="w-5 h-5"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"
+            ></path>
+          </svg>
+          Case List
+        </div>
+        <div
+          id="nav-reports"
+          class="nav-item flex items-center gap-3 px-4 py-3 text-sm"
+        >
+          <svg
+            class="w-5 h-5"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
+            ></path>
+          </svg>
+          Reports
+        </div>
+        <div
+          id="nav-profile"
+          class="nav-item flex items-center gap-3 px-4 py-3 text-sm"
+        >
+          <svg
+            class="w-5 h-5"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+            ></path>
+          </svg>
+          Profile & Security
+        </div>
+      </nav>
+
+      <div class="p-4 border-t border-gray-200">
+        <button
+          id="btn-logout"
+          class="flex items-center gap-3 px-4 py-3 text-sm text-red-600 hover:bg-red-50 rounded-xl w-full transition"
+        >
+          <svg
+            class="w-5 h-5"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
+            ></path>
+          </svg>
+          Logout
+        </button>
+      </div>
+    </aside>
+
+    <main
+      class="flex-1 ml-0 md:ml-64 p-6 md:p-10 h-screen overflow-y-auto relative scroll-smooth"
+    >
+      <div
+        class="fixed top-0 right-0 w-[600px] h-[600px] bg-blue-50 rounded-full blur-3xl opacity-50 -z-10 pointer-events-none"
+      ></div>
+
+      <header class="flex justify-between items-center mb-8">
+        <div class="flex items-center gap-2 text-sm text-gray-500">
+          <span class="hover:text-black cursor-pointer">Admin</span>
+          <span class="text-gray-300">/</span>
+          <span id="breadcrumb-current" class="font-bold text-black"
+            >Dashboard</span
+          >
+        </div>
+        <div class="flex items-center gap-4">
+          <div class="text-right hidden sm:block" id="header-user">
+            <p class="text-sm font-bold" id="header-user-name">Admin</p>
+            <p class="text-xs text-gray-500" id="header-user-dept">
+              Department
+            </p>
+          </div>
+          <div
+            class="w-10 h-10 bg-gray-200 rounded-full border border-white shadow-sm overflow-hidden"
+          >
+            <img
+              id="header-avatar-img"
+              src="https://ui-avatars.com/api/?name=A&background=1d1d1f&color=fff"
+              alt="Admin"
+            />
+          </div>
+        </div>
+      </header>
+
+      <section id="view-dashboard" class="view-section active">
+        <div class="grid grid-cols-2 md:grid-cols-5 gap-4 mb-8">
+          <div class="glass-panel p-5 rounded-2xl border-l-4 border-yellow-400">
+            <p
+              class="text-[10px] font-bold text-gray-400 uppercase tracking-wider"
+            >
+              Pending
+            </p>
+            <h3 class="text-3xl font-serif mt-1">12</h3>
+          </div>
+          <div class="glass-panel p-5 rounded-2xl border-l-4 border-blue-400">
+            <p
+              class="text-[10px] font-bold text-gray-400 uppercase tracking-wider"
+            >
+              In Progress
+            </p>
+            <h3 class="text-3xl font-serif mt-1">5</h3>
+          </div>
+          <div class="glass-panel p-5 rounded-2xl border-l-4 border-red-500">
+            <p
+              class="text-[10px] font-bold text-gray-400 uppercase tracking-wider"
+            >
+              Escalated
+            </p>
+            <h3 class="text-3xl font-serif mt-1">2</h3>
+          </div>
+          <div class="glass-panel p-5 rounded-2xl border-l-4 border-green-500">
+            <p
+              class="text-[10px] font-bold text-gray-400 uppercase tracking-wider"
+            >
+              Resolved
+            </p>
+            <h3 class="text-3xl font-serif mt-1">45</h3>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <div
+            class="glass-panel p-6 rounded-[2rem] lg:col-span-3 overflow-hidden"
+          >
+            <div class="flex justify-between items-center mb-4">
+              <h3 class="font-serif text-lg">Recent Cases</h3>
+              <button
+                id="btn-view-all-cases"
+                class="text-xs font-bold text-black underline hover:no-underline"
+              >
+                View All
+              </button>
+            </div>
+            <div class="overflow-x-auto">
+              <table class="w-full text-left text-sm text-gray-600">
+                <thead
+                  class="text-xs uppercase font-bold text-gray-400 border-b border-gray-100"
+                >
+                  <tr>
+                    <th class="pb-3">Case ID</th>
+                    <th class="pb-3">Category</th>
+                    <th class="pb-3 text-right">Action</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-50"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="view-cases" class="view-section">
+        <div
+          class="glass-panel rounded-[2rem] p-6 max-h-[calc(100vh-8rem)] overflow-y-auto"
+        >
+          <div
+            class="flex flex-col md:flex-row justify-between items-center gap-4 mb-6 pb-6 border-b border-gray-100"
+          >
+            <div class="flex items-center gap-3 flex-wrap w-full md:w-auto">
+              <!-- Search by Case ID -->
+              <div class="relative">
+                <svg class="w-4 h-4 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-4.35-4.35M17 11A6 6 0 115 11a6 6 0 0112 0z"/></svg>
+                <input
+                  id="input-search-cases"
+                  type="text"
+                  placeholder="Search by Case ID..."
+                  class="pl-9 pr-4 py-2 bg-gray-50 border border-gray-200 text-sm rounded-full outline-none focus:border-black focus:outline-none transition w-52"
+                />
+              </div>
+              <!-- Status filter -->
+              <select
+                id="select-filter-status"
+                class="bg-gray-50 border border-gray-200 text-sm rounded-full px-4 py-2 focus:outline-none focus:border-black"
+              >
+                <option>All Status</option>
+                <option>Pending</option>
+                <option>In Progress</option>
+                <option>Escalated</option>
+                <option>Resolved</option>
+              </select>
+            </div>
+          </div>
+
+          <table class="w-full text-left text-sm text-gray-600">
+            <thead
+              class="text-xs uppercase font-bold text-gray-400 bg-gray-50/50"
+            >
+              <tr>
+                <th class="px-6 py-4 rounded-l-xl">Case ID</th>
+                <th class="px-6 py-4">Student</th>
+                <th class="px-6 py-4">Category</th>
+                <th class="px-6 py-4">Status</th>
+                <th class="px-6 py-4 text-right rounded-r-xl">Action</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-50" id="case-list"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section id="view-case-detail" class="view-section">
+        <button
+          id="btn-back-to-list"
+          class="flex items-center gap-2 text-sm text-gray-500 hover:text-black mb-6"
+        >
+          <svg
+            class="w-4 h-4"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M10 19l-7-7m0 0l7-7m-7 7h18"
+            ></path>
+          </svg>
+          Back to List
+        </button>
+
+        <div
+          class="glass-panel p-6 rounded-[2rem] mb-6 flex flex-col md:flex-row justify-between items-start md:items-center gap-4"
+          id="case-detail"
+        >
+          <div>
+            <div class="flex items-center gap-3 mb-1">
+              <h2 class="text-2xl font-serif" id="detail-id">#G-1024</h2>
+            </div>
+            <p class="text-gray-500 text-sm" id="detail-title">
+              Water Cooler Leaking on 2nd Floor
+            </p>
+          </div>
+          <div class="flex items-center gap-4">
+            <button
+              id="btn-change-status"
+              class="bg-white border border-gray-200 text-sm rounded-full px-4 py-2 font-bold cursor-pointer hover:bg-gray-50 flex items-center gap-2"
+            >
+              Change Status
+              <svg
+                class="w-3 h-3"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M19 9l-7 7-7-7"
+                ></path>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <div class="lg:col-span-2 space-y-6">
+            <div class="glass-panel p-8 rounded-[2rem]">
+              <h3 class="font-bold text-sm uppercase text-gray-400 mb-4">
+                Grievance Details
+              </h3>
+              <p class="text-gray-700 leading-relaxed text-sm" id="detail-desc">
+                The water cooler located near Room 204 has been leaking
+                continuously for the past 48 hours. It is creating a large
+                puddle which is a slipping hazard. I have reported this to the
+                cleaner but no action has been taken.
+              </p>
+              <div
+                id="attachment-list"
+                class="mt-6 p-4 bg-gray-50 rounded-xl flex items-center gap-3 border border-gray-100 w-max"
+              >
+                <div
+                  class="w-10 h-10 bg-gray-200 rounded-lg flex items-center justify-center text-xs font-bold"
+                >
+                  JPG
+                </div>
+                <div>
+                  <p class="text-sm font-bold">evidence_photo.jpg</p>
+                  <p class="text-[10px] text-gray-500">2.4 MB</p>
+                </div>
+                <button class="text-xs underline ml-4">View</button>
+              </div>
+            </div>
+
+            <div class="glass-panel p-6 rounded-[2rem]">
+              <div class="flex border-b border-gray-100 mb-4 items-center">
+                <button
+                  class="px-4 py-2 text-sm font-bold border-b-2 border-black"
+                >
+                  Student Chat
+                </button>
+
+                <button
+                  id="btn-refresh-chat"
+                  title="Refresh chat"
+                  class="ml-auto w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-100 transition text-gray-500 hover:text-black"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="h-4 w-4"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    stroke-width="2"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M4 4v5h5M20 20v-5h-5M4.929 9A8 8 0 0119.07 9M19.071 15A8 8 0 014.93 15"
+                    />
+                  </svg>
+                </button>
+              </div>
+
+              <div
+                class="space-y-4 h-64 overflow-y-auto bg-gray-50/50 p-4 rounded-xl mb-4"
+                id="chat-thread"
+              >
+                <div class="flex gap-3">
+                  <div
+                    class="w-8 h-8 bg-gray-200 rounded-full flex-shrink-0 flex items-center justify-center text-[10px] font-bold"
+                  >
+                    S
+                  </div>
+                  <div
+                    class="bg-white p-3 rounded-2xl rounded-tl-none shadow-sm text-sm border border-gray-100 max-w-[80%]"
+                  >
+                    Is there any update on this? It's getting slippery.
+                    <p class="text-[10px] text-gray-400 mt-1">10:45 AM</p>
+                  </div>
+                </div>
+                <div class="flex gap-3 flex-row-reverse">
+                  <div
+                    class="w-8 h-8 bg-black text-white rounded-full flex-shrink-0 flex items-center justify-center text-[10px] font-bold"
+                  >
+                    A
+                  </div>
+                  <div
+                    class="bg-black text-white p-3 rounded-2xl rounded-tr-none shadow-sm text-sm max-w-[80%]"
+                  >
+                    Maintenance team has been dispatched. They should arrive by
+                    2 PM.
+                    <p class="text-[10px] text-gray-400 mt-1">11:00 AM</p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="flex gap-2">
+                <input
+                  type="text"
+                  id="input-chat-reply"
+                  placeholder="Type a reply to student..."
+                  class="flex-1 bg-white border border-gray-200 rounded-full px-4 py-2 text-sm focus:outline-none focus:border-black"
+                />
+                <button
+                  id="btn-chat-send"
+                  class="bg-black text-white px-6 py-2 rounded-full text-xs font-bold"
+                >
+                  Send
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div class="space-y-6">
+            <div class="glass-panel p-6 rounded-[2rem]">
+              <h3 class="font-bold text-sm uppercase text-gray-400 mb-4">
+                Student Info
+              </h3>
+              <div class="flex items-center gap-4 mb-4">
+                <div
+                  id="student-avatar"
+                  class="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center text-lg font-serif"
+                >
+                  —
+                </div>
+                <div>
+                  <p class="font-bold" id="student-name">—</p>
+                  <p class="text-xs text-gray-500" id="student-program">—</p>
+                </div>
+              </div>
+              <div class="space-y-2 text-xs text-gray-600">
+                <div class="flex justify-between">
+                  <span>Roll No:</span>
+                  <span class="font-mono" id="student-roll">—</span>
+                </div>
+                <div class="flex justify-between">
+                  <span>Email:</span> <span id="student-email">—</span>
+                </div>
+                <div class="flex justify-between">
+                  <span>Phone:</span> <span id="student-phone">—</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="glass-panel p-6 rounded-[2rem]">
+              <h3 class="font-bold text-sm uppercase text-gray-400 mb-4">
+                Quick Actions
+              </h3>
+              <!-- Actions dropdown -->
+              <div class="relative" id="actions-dropdown-wrapper">
+                <button
+                  id="btn-actions-dropdown"
+                  class="w-full py-3 rounded-xl bg-black text-white text-sm font-bold hover:bg-gray-800 transition flex items-center justify-center gap-2"
+                  onclick="document.getElementById('actions-menu').classList.toggle('hidden')"
+                >
+                  Actions
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                </button>
+                <div id="actions-menu" class="hidden absolute z-10 mt-2 w-full bg-white border border-gray-100 rounded-2xl shadow-lg overflow-hidden">
+                  <button
+                    id="btn-action-escalate"
+                    class="w-full px-4 py-3 text-left text-sm font-bold text-red-600 hover:bg-red-50 transition flex items-center gap-2"
+                    onclick="document.getElementById('actions-menu').classList.add('hidden')"
+                  >⚠ Escalate Case</button>
+                  <button
+                    id="btn-action-resolve"
+                    class="w-full px-4 py-3 text-left text-sm font-bold text-green-700 hover:bg-green-50 transition flex items-center gap-2"
+                    onclick="document.getElementById('actions-menu').classList.add('hidden')"
+                  >✓ Resolve &amp; Close</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="view-reports" class="view-section">
+        <div
+          class="max-w-xl mx-auto glass-panel p-10 rounded-[2.5rem] bg-white text-center mt-12"
+        >
+          <div
+            class="w-16 h-16 bg-blue-50 text-blue-600 rounded-full flex items-center justify-center text-2xl mx-auto mb-6"
+          >
+            📊
+          </div>
+          <h2 class="text-2xl font-serif font-bold mb-2">Department Reports</h2>
+          <p class="text-sm text-gray-500 mb-8">
+            Generate and download grievance statistics.
+          </p>
+
+          <div
+            class="bg-gray-50 p-6 rounded-2xl border border-gray-100 mb-8 text-left space-y-4"
+          >
+            <div>
+              <label class="text-xs font-bold text-gray-400 uppercase ml-1"
+                >Time Period</label
+              >
+              <select
+                id="select-report-period"
+                class="w-full mt-1 p-3 bg-white border border-gray-200 rounded-xl text-sm outline-none"
+              >
+                <option value="weekly">Weekly (Last 7 Days)</option>
+                <option value="15days">15 Days</option>
+                <option value="monthly" selected>Monthly (Last 30 Days)</option>
+                <option value="yearly">Yearly</option>
+              </select>
+            </div>
+            <div>
+              <label class="text-xs font-bold text-gray-400 uppercase ml-1"
+                >Format</label
+              >
+              <select
+                id="select-report-format"
+                class="w-full mt-1 p-3 bg-white border border-gray-200 rounded-xl text-sm outline-none"
+              >
+                <option value="excel">Excel Spreadsheet</option>
+                <option value="pdf">PDF Document</option>
+              </select>
+            </div>
+          </div>
+          <button
+            id="btn-download-report"
+            class="px-10 py-3 bg-black text-white font-bold rounded-full shadow-lg hover:scale-105 transition"
+          >
+            Download Report
+          </button>
+        </div>
+      </section>
+
+      <section id="view-profile" class="view-section">
+        <div class="glass-panel p-10 rounded-[2rem] max-w-2xl">
+          <h2 class="text-2xl font-serif mb-6">Profile & Security</h2>
+          <div class="flex items-center gap-6 mb-8">
+            <div
+              class="w-20 h-20 bg-gray-200 rounded-full border-4 border-white shadow-lg overflow-hidden"
+              id="admin-profile-avatar"
+            >
+              <img
+                src="https://ui-avatars.com/api/?name=Warden+Smith&background=1d1d1f&color=fff"
+                alt="Admin"
+                class="w-full h-full object-cover"
+              />
+            </div>
+            <div>
+              <h3 class="text-xl font-bold" id="admin-profile-name">
+                Warden Smith
+              </h3>
+              <p class="text-gray-500" id="admin-profile-dept">
+                Hostel Department
+              </p>
+              <p class="text-xs text-gray-400 mt-1" id="admin-profile-email">
+                warden@hostel.uni
+              </p>
+            </div>
+          </div>
+          <div class="space-y-4">
+            <div class="p-4 bg-gray-50 rounded-xl border border-gray-100">
+              <label class="text-xs font-bold text-gray-400 uppercase"
+                >Role</label
+              >
+              <p class="font-medium">Department Admin</p>
+            </div>
+            <div class="p-4 bg-gray-50 rounded-xl border border-gray-100">
+              <label class="text-xs font-bold text-gray-400 uppercase"
+                >Phone</label
+              >
+              <p class="font-medium">+91 98765 00000</p>
+            </div>
+            <div
+              class="p-4 bg-yellow-50 border border-yellow-100 rounded-xl text-yellow-800 text-sm"
+            >
+              For security reasons, you cannot change your Department manually.
+              Contact IT Support for re-assignment.
+            </div>
+            <button
+              id="btn-change-password"
+              class="bg-black text-white px-6 py-3 rounded-full text-sm font-bold hover:bg-gray-800 transition"
+            >
+              Change Password
+            </button>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <div
+      id="escalate-modal"
+      class="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm hidden"
+      style="display: none"
+    >
+      <div class="glass-panel w-full max-w-md rounded-3xl p-8 shadow-2xl">
+        <h3 class="text-xl font-serif mb-2">Escalate Case</h3>
+        <p class="text-sm text-gray-500 mb-6">
+          Forward this case to a higher authority. This action is logged.
+        </p>
+
+        <div class="space-y-4 mb-6">
+          <div>
+            <label class="text-xs font-bold text-gray-400 uppercase block mb-1"
+              >Reason</label
+            >
+            <textarea
+              class="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl text-sm"
+              rows="3"
+              placeholder="Why are you escalating this?"
+            ></textarea>
+          </div>
+        </div>
+
+        <div class="flex justify-end gap-3">
+          <button
+            id="btn-escalate-cancel"
+            class="px-4 py-2 text-sm text-gray-500 font-bold"
+          >
+            Cancel
+          </button>
+          <button
+            id="btn-escalate-confirm"
+            class="px-6 py-2 bg-red-600 text-white rounded-full text-sm font-bold shadow-lg hover:bg-red-700"
+          >
+            Confirm Escalation
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Status Change Modal -->
+    <div
+      id="status-modal"
+      class="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm hidden"
+      style="display: none"
+    >
+      <div
+        class="glass-panel w-full max-w-md rounded-3xl p-8 shadow-2xl bg-white"
+      >
+        <h3 class="text-xl font-serif mb-2">Change Case Status</h3>
+        <p class="text-sm text-gray-500 mb-6">
+          Add a remark explaining the status change.
+        </p>
+
+        <div class="space-y-4 mb-6">
+          <div>
+            <label class="text-xs font-bold text-gray-400 uppercase block mb-1"
+              >New Status</label
+            >
+            <select
+              id="select-new-status"
+              class="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl text-sm"
+            >
+              <option value="In Progress">In Progress</option>
+              <option value="Resolved">Resolved</option>
+              <option value="Escalated">Escalated</option>
+            </select>
+          </div>
+          <div>
+            <label class="text-xs font-bold text-gray-400 uppercase block mb-1"
+              >Remark (Required)</label
+            >
+            <textarea
+              id="input-status-remark"
+              class="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl text-sm"
+              rows="3"
+              placeholder="Why are you changing the status?"
+            ></textarea>
+          </div>
+        </div>
+
+        <div class="flex justify-end gap-3">
+          <button
+            id="btn-status-cancel"
+            class="px-4 py-2 text-sm text-gray-500 font-bold"
+          >
+            Cancel
+          </button>
+          <button
+            id="btn-status-confirm"
+            class="px-6 py-2 bg-black text-white rounded-full text-sm font-bold shadow-lg hover:bg-gray-800"
+          >
+            Update Status
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Password Change Modal -->
+    <div
+      id="password-modal"
+      class="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm hidden"
+      style="display: none"
+    >
+      <div
+        class="glass-panel w-full max-w-md rounded-3xl p-8 shadow-2xl bg-white"
+      >
+        <h3 class="text-xl font-serif mb-2">Change Password</h3>
+        <p class="text-sm text-gray-500 mb-6">
+          Enter your current and new password.
+        </p>
+
+        <div class="space-y-4 mb-6">
+          <div>
+            <label class="text-xs font-bold text-gray-400 uppercase block mb-1"
+              >Current Password</label
+            >
+            <input
+              type="password"
+              id="input-current-password"
+              class="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl text-sm"
+              placeholder="••••••••"
+            />
+          </div>
+          <div>
+            <label class="text-xs font-bold text-gray-400 uppercase block mb-1"
+              >New Password</label
+            >
+            <input
+              type="password"
+              id="input-new-password"
+              class="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl text-sm"
+              placeholder="••••••••"
+            />
+          </div>
+          <div>
+            <label class="text-xs font-bold text-gray-400 uppercase block mb-1"
+              >Confirm New Password</label
+            >
+            <input
+              type="password"
+              id="input-confirm-password"
+              class="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl text-sm"
+              placeholder="••••••••"
+            />
+          </div>
+        </div>
+
+        <div class="flex justify-end gap-3">
+          <button
+            id="btn-password-cancel"
+            class="px-4 py-2 text-sm text-gray-500 font-bold"
+          >
+            Cancel
+          </button>
+          <button
+            id="btn-password-confirm"
+            class="px-6 py-2 bg-black text-white rounded-full text-sm font-bold shadow-lg hover:bg-gray-800"
+          >
+            Update Password
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Confirm Dialog Modal -->
+    <div
+      id="confirm-modal"
+      class="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm hidden"
+      style="display: none"
+    >
+      <div
+        class="glass-panel w-full max-w-sm rounded-3xl p-8 shadow-2xl bg-white text-center"
+      >
+        <div
+          class="w-16 h-16 bg-yellow-50 rounded-full flex items-center justify-center text-3xl mx-auto mb-4"
+        >
+          ⚠️
+        </div>
+        <h3 class="text-xl font-serif mb-2" id="confirm-title">
+          Confirm Action
+        </h3>
+        <p class="text-sm text-gray-500 mb-6" id="confirm-message">
+          Are you sure you want to proceed?
+        </p>
+        <div class="flex justify-center gap-3">
+          <button
+            id="btn-confirm-no"
+            class="px-6 py-2 text-sm text-gray-500 font-bold border border-gray-200 rounded-full hover:bg-gray-50"
+          >
+            Cancel
+          </button>
+          <button
+            id="btn-confirm-yes"
+            class="px-6 py-2 bg-black text-white rounded-full text-sm font-bold shadow-lg hover:bg-gray-800"
+          >
+            Confirm
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div
+      id="toast"
+      class="fixed bottom-6 right-6 z-[100] transition-all duration-300 translate-y-20 opacity-0 pointer-events-none"
+    >
+      <div
+        class="glass-panel px-6 py-4 rounded-2xl shadow-2xl flex items-center gap-4 bg-white border border-gray-100"
+      >
+        <div
+          id="toast-icon"
+          class="w-10 h-10 rounded-full flex items-center justify-center text-lg bg-green-100 text-green-600"
+        >
+          ✓
+        </div>
+        <div>
+          <p id="toast-title" class="font-bold text-sm">Success</p>
+          <p id="toast-message" class="text-xs text-gray-500">
+            Operation completed successfully.
+          </p>
+        </div>
+        <button id="toast-close" class="text-gray-400 hover:text-black ml-2">
+          ✕
+        </button>
+      </div>
+    </div>
+
+    <script type="module" src="../js/core.js"></script>
+    <script type="module" src="../js/api.js"></script>
+    <script type="module" src="../js/admin.js"></script>
+  </body>
+</html>

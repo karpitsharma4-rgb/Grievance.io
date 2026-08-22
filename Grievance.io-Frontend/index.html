@@ -1,0 +1,406 @@
+<!doctype html>
+<html lang="en" class="scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Student Grievance Redressal System</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap"
+      rel="stylesheet"
+    />
+
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ["Inter", "sans-serif"],
+              serif: ["Playfair Display", "serif"],
+            },
+            colors: {
+              brandBlack: "#1d1d1f",
+              brandGray: "#f5f5f7",
+            },
+          },
+        },
+      };
+    </script>
+
+    <style>
+      /* Base Glass Style */
+      .glass-card {
+        background: rgba(255, 255, 255, 0.7);
+        backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 255, 255, 0.6);
+        box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.05);
+      }
+
+      /* Nav Active State */
+      .nav-link.active {
+        color: #000000;
+        background-color: rgba(255, 255, 255, 1);
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        font-weight: 600;
+      }
+
+      /* Reveal Animation */
+      .reveal {
+        opacity: 0;
+        transform: translateY(30px);
+        transition: all 0.8s ease-out;
+      }
+      .reveal.active {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    </style>
+  </head>
+  <body class="bg-brandGray text-brandBlack overflow-x-hidden">
+    <nav
+      class="fixed w-full top-0 z-50 transition-all duration-300 backdrop-blur-md bg-brandGray/80 border-b border-gray-200/50"
+    >
+      <div
+        class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center"
+      >
+        <a href="#hero" class="flex items-center gap-2 group cursor-pointer">
+          <div
+            class="w-8 h-8 bg-black rounded-full flex items-center justify-center text-white font-bold text-xs group-hover:scale-110 transition"
+          >
+            G
+          </div>
+          <span class="font-semibold text-brandBlack tracking-tight text-lg"
+            >/ Grievance.io</span
+          >
+        </a>
+
+        <div class="hidden md:flex bg-gray-200/50 p-1 rounded-full gap-1">
+          <a
+            href="#dashboard-section"
+            class="nav-link px-4 py-1.5 rounded-full text-sm font-medium text-gray-500 transition-all duration-300"
+            >Dashboard</a
+          >
+          <a
+            href="#track-section"
+            class="nav-link px-4 py-1.5 rounded-full text-sm font-medium text-gray-500 transition-all duration-300"
+            >Track Status</a
+          >
+          <a
+            href="#stories-section"
+            class="nav-link px-4 py-1.5 rounded-full text-sm font-medium text-gray-500 transition-all duration-300"
+            >Stories</a
+          >
+          <a
+            href="#login-section"
+            class="nav-link px-4 py-1.5 rounded-full text-sm font-medium text-gray-500 transition-all duration-300"
+            >Join Now</a
+          >
+        </div>
+
+        <a
+          href="/pages/auth.html"
+          id="btn-login-sticky"
+          class="hidden sm:block text-sm font-medium border border-gray-300 px-5 py-2 rounded-full hover:bg-black hover:text-white transition"
+        >
+          Login
+        </a>
+      </div>
+    </nav>
+
+    <section id="hero" class="min-h-screen flex items-center pt-20">
+      <div
+        class="max-w-7xl mx-auto px-6 lg:px-8 w-full grid grid-cols-1 lg:grid-cols-2 gap-12 items-center"
+      >
+        <div class="space-y-8 reveal active">
+          <h1
+            class="text-6xl sm:text-7xl lg:text-[5.5rem] font-serif leading-[1]"
+          >
+            Resolve<sup class="text-4xl text-gray-400">+</sup>
+          </h1>
+          <p class="text-xl text-gray-500 max-w-md leading-relaxed">
+            The modern way to handle student grievances. Fast, transparent, and
+            completely digital.
+          </p>
+          <div class="flex gap-4">
+            <a
+              href="#dashboard-section"
+              id="btn-explore"
+              class="bg-black text-white px-8 py-4 rounded-full font-medium hover:scale-105 transition shadow-xl"
+            >
+              Explore Features
+            </a>
+          </div>
+        </div>
+        <div
+          class="relative h-[500px] w-full bg-gray-200 rounded-[3rem] overflow-hidden shadow-2xl reveal active delay-200"
+        >
+          <img
+            src="https://images.unsplash.com/photo-1523240795612-9a054b0db644?ixlib=rb-4.0.3&auto=format&fit=crop&w=1740&q=80"
+            class="object-cover w-full h-full opacity-90 hover:scale-105 transition duration-700"
+          />
+        </div>
+      </div>
+    </section>
+
+    <section
+      id="dashboard-section"
+      class="min-h-screen flex items-center py-20 bg-white relative overflow-hidden"
+    >
+      <div
+        class="absolute top-0 right-0 w-[500px] h-[500px] bg-blue-50 rounded-full blur-3xl opacity-50 -z-10"
+      ></div>
+      <div
+        class="max-w-7xl mx-auto px-6 lg:px-8 w-full grid grid-cols-1 lg:grid-cols-2 gap-20 items-center"
+      >
+        <div class="order-2 lg:order-1 reveal">
+          <span
+            class="text-xs font-bold tracking-widest text-blue-600 uppercase mb-2 block"
+            >The Interface</span
+          >
+          <h2 class="text-5xl font-serif mb-6">Simple, yet powerful.</h2>
+          <p class="text-lg text-gray-600 mb-8 leading-relaxed">
+            We stripped away the clutter. The
+            <strong>Student Dashboard</strong> gives you a bird's-eye view of
+            your academic concerns. File a complaint in 3 clicks.
+          </p>
+          <ul class="space-y-4">
+            <li class="flex items-center gap-3">
+              <div
+                class="w-6 h-6 rounded-full bg-green-100 text-green-600 flex items-center justify-center text-xs"
+              >
+                ✓
+              </div>
+              <span class="font-medium text-gray-700"
+                >One-click submission</span
+              >
+            </li>
+          </ul>
+        </div>
+        <div class="order-1 lg:order-2 relative reveal delay-200">
+          <div
+            class="glass-card rounded-2xl p-6 w-full aspect-[4/3] relative overflow-hidden transform rotate-2 hover:rotate-0 transition duration-500"
+          >
+            <div
+              class="absolute left-0 top-0 bottom-0 w-16 bg-gray-50 border-r border-gray-200 flex flex-col items-center py-6 gap-4"
+            >
+              <div class="w-8 h-8 rounded-lg bg-black"></div>
+              <div class="w-6 h-6 rounded bg-gray-200 mt-4"></div>
+              <div class="w-6 h-6 rounded bg-gray-200"></div>
+            </div>
+            <div class="ml-16 mb-6 flex justify-between items-center">
+              <div class="h-4 w-32 bg-gray-200 rounded"></div>
+              <div class="h-8 w-8 rounded-full bg-gray-300"></div>
+            </div>
+            <div class="ml-16 grid grid-cols-2 gap-4">
+              <div class="bg-blue-50 p-4 rounded-xl h-32"></div>
+              <div class="bg-orange-50 p-4 rounded-xl h-32"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section
+      id="track-section"
+      class="min-h-screen flex items-center py-20 bg-brandGray relative"
+    >
+      <div
+        class="max-w-7xl mx-auto px-6 lg:px-8 w-full grid grid-cols-1 lg:grid-cols-2 gap-20 items-center"
+      >
+        <div class="relative reveal">
+          <div
+            class="glass-card rounded-3xl p-8 max-w-md mx-auto relative -rotate-2 hover:rotate-0 transition duration-500"
+          >
+            <div class="flex justify-between items-end mb-8">
+              <div>
+                <p class="text-xs text-gray-500 uppercase">Ticket ID #4920</p>
+                <h3 class="text-xl font-bold">Hostel WiFi Issue</h3>
+              </div>
+              <span
+                class="bg-yellow-100 text-yellow-700 text-xs font-bold px-2 py-1 rounded"
+                >In Progress</span
+              >
+            </div>
+            <div
+              class="relative border-l-2 border-gray-200 ml-2 space-y-8 pl-6"
+            >
+              <div class="relative">
+                <div
+                  class="absolute -left-[31px] w-4 h-4 rounded-full bg-green-500 ring-4 ring-white"
+                ></div>
+                <p class="text-sm font-bold text-gray-900">Submitted</p>
+                <p class="text-xs text-gray-500">Oct 25, 10:00 AM</p>
+              </div>
+              <div class="relative">
+                <div
+                  class="absolute -left-[31px] w-4 h-4 rounded-full bg-yellow-400 ring-4 ring-white animate-pulse"
+                ></div>
+                <p class="text-sm font-bold text-gray-900">
+                  Technician Assigned
+                </p>
+                <p class="text-xs text-gray-500">Just now</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="reveal delay-200">
+          <span
+            class="text-xs font-bold tracking-widest text-orange-600 uppercase mb-2 block"
+            >Real-time Updates</span
+          >
+          <h2 class="text-5xl font-serif mb-6">
+            Never wonder "What happened?"
+          </h2>
+          <p class="text-lg text-gray-600 mb-8 leading-relaxed">
+            With our <strong>Live Tracker</strong>, watch your grievance move
+            from submission to resolution in real-time.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section id="stories-section" class="py-32 bg-white overflow-hidden">
+      <div class="max-w-7xl mx-auto px-6 lg:px-8 mb-12 text-center reveal">
+        <h2 class="text-5xl font-serif mb-4">Voices from Campus</h2>
+        <p class="text-gray-500">
+          See how fast redressal is changing student life.
+        </p>
+      </div>
+
+      <div
+        class="max-w-4xl mx-auto px-6 relative reveal delay-200"
+        id="carousel-wrapper"
+      >
+        <div class="overflow-hidden rounded-3xl p-2">
+          <div
+            id="testimonial-track"
+            class="flex transition-transform duration-700 ease-[cubic-bezier(0.25,1,0.5,1)]"
+          >
+            <div class="w-full flex-shrink-0 px-4">
+              <div
+                class="glass-card p-10 rounded-3xl border border-gray-100 bg-gray-50/50 flex flex-col items-center text-center"
+              >
+                <div class="flex gap-1 text-yellow-500 mb-6 text-xl">★★★★★</div>
+                <p
+                  class="text-2xl font-serif text-gray-800 italic mb-8 leading-relaxed"
+                >
+                  "I had an issue with my examination fees. I raised a ticket,
+                  and the Accounts department cleared it within 4 hours. No
+                  running around counters."
+                </p>
+                <div class="flex flex-col items-center gap-2">
+                  <img
+                    src="https://randomuser.me/api/portraits/women/63.jpg"
+                    class="w-14 h-14 rounded-full border-2 border-white shadow-md"
+                  />
+                  <div>
+                    <p class="font-bold text-base">Priya Sharma</p>
+                    <p class="text-xs text-gray-500 uppercase tracking-wide">
+                      CS Department
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="w-full flex-shrink-0 px-4">
+              <div
+                class="glass-card p-10 rounded-3xl border border-gray-100 bg-gray-50/50 flex flex-col items-center text-center"
+              >
+                <div class="flex gap-1 text-yellow-500 mb-6 text-xl">★★★★★</div>
+                <p
+                  class="text-2xl font-serif text-gray-800 italic mb-8 leading-relaxed"
+                >
+                  "As a hostel warden, this system is a lifesaver. I get
+                  notified immediately when students face maintenance issues."
+                </p>
+                <div class="flex flex-col items-center gap-2">
+                  <img
+                    src="https://randomuser.me/api/portraits/men/32.jpg"
+                    class="w-14 h-14 rounded-full border-2 border-white shadow-md"
+                  />
+                  <div>
+                    <p class="font-bold text-base">Dr. Rajesh Verma</p>
+                    <p class="text-xs text-gray-500 uppercase tracking-wide">
+                      Chief Warden
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="w-full flex-shrink-0 px-4">
+              <div
+                class="glass-card p-10 rounded-3xl border border-gray-100 bg-gray-50/50 flex flex-col items-center text-center"
+              >
+                <div class="flex gap-1 text-yellow-500 mb-6 text-xl">★★★★☆</div>
+                <p
+                  class="text-2xl font-serif text-gray-800 italic mb-8 leading-relaxed"
+                >
+                  "The anonymity feature is great. I was hesitant to report a
+                  sensitive incident, but the system allowed me to do it
+                  safely."
+                </p>
+                <div class="flex flex-col items-center gap-2">
+                  <div
+                    class="w-14 h-14 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-bold text-xl border-2 border-white shadow-md"
+                  >
+                    A
+                  </div>
+                  <div>
+                    <p class="font-bold text-base">Anonymous</p>
+                    <p class="text-xs text-gray-500 uppercase tracking-wide">
+                      Mechanical Dept.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div
+          class="w-32 h-1 bg-gray-200 rounded-full mx-auto mt-8 overflow-hidden"
+        >
+          <div
+            id="progress-bar"
+            class="h-full bg-black w-0 transition-all duration-[1500ms] ease-linear"
+          ></div>
+        </div>
+      </div>
+    </section>
+
+    <section
+      id="login-section"
+      class="min-h-screen flex flex-col justify-center items-center py-20 bg-brandGray text-center px-4 relative"
+    >
+      <div
+        class="absolute inset-0 bg-gradient-to-t from-white to-transparent opacity-50"
+      ></div>
+      <div class="max-w-3xl space-y-8 reveal relative z-10">
+        <div
+          class="w-16 h-16 bg-black text-white rounded-2xl flex items-center justify-center text-2xl font-serif mx-auto shadow-xl mb-4"
+        >
+          G+
+        </div>
+        <h2 class="text-5xl sm:text-7xl font-serif text-brandBlack">
+          Ready to be heard?
+        </h2>
+        <div class="pt-8">
+          <a
+            href="/pages/auth.html"
+            class="inline-block bg-black text-white text-lg font-medium px-12 py-5 rounded-full shadow-2xl hover:scale-105 hover:bg-gray-900 transition duration-300"
+          >
+            Login Now to Get Redressal
+          </a>
+        </div>
+      </div>
+      <div class="absolute bottom-6 text-xs text-gray-400">
+        © 2026 Grievance.io System.
+      </div>
+    </section>
+
+    <script type="module" src="/js/core.js"></script>
+  </body>
+  
+</html>

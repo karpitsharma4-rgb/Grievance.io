@@ -1,0 +1,32 @@
+{
+  "name": "grivience.io",
+  "version": "1.0.0",
+  "description": "Grievance.io is a comprehensive grievance management system designed to streamline the process of handling complaints and feedback. It provides a user-friendly interface for both users and administrators, allowing for efficient tracking, resolution, and analysis of grievances. The system includes features such as complaint submission, status tracking, communication tools, and reporting capabilities to ensure that grievances are addressed in a timely and effective manner.",
+  "main": "index.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js",
+    "seed": "node backend/seed.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ https://github.com/Harsh-X-dev/Grievance-Backend.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "bcryptjs": "^3.0.3",
+    "cors": "^2.8.6",
+    "dotenv": "^17.3.1",
+    "exceljs": "^4.4.0",
+    "express": "^5.2.1",
+    "jsonwebtoken": "^9.0.3",
+    "mongoose": "^9.2.1",
+    "multer": "^2.0.2",
+    "nodemailer": "^8.0.1",
+    "pdfkit": "^0.17.2"
+  }
+}
