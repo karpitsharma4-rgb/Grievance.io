@@ -1,18 +1,9 @@
 /**
  * API Module - Connects to the real Express/MongoDB backend
- * Auto-detects: uses relative /api in production, localhost in dev
+ * Backend: https://grievance-io-5gw2.onrender.com
  */
 
-const envApiBaseUrl = (import.meta.env.VITE_API_BASE_URL || "")
-  .trim()
-  .replace(/\/+$/, "");
-
-const BASE_URL =
-  envApiBaseUrl ||
-  (window.location.hostname === "localhost" ||
-  window.location.hostname === "127.0.0.1"
-    ? "http://localhost:5000/api"
-    : "/api");
+const BASE_URL = "https://grievance-io-5gw2.onrender.com/api";
 
 // Base URL for uploaded file attachments (strips /api suffix)
 const UPLOADS_BASE = BASE_URL.replace("/api", "");
